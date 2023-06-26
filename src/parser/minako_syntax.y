@@ -5,7 +5,7 @@
 %define api.parser.check_debug { self.debug }
 
 %define parse.error custom
-%define parse.trace
+%define parse.trace 
 
 %code use {
     // all use goes here
@@ -57,10 +57,326 @@
 %%
 
 program:
-	// empty
-	{
-            $$ = Value::None;
-        }
+%empty
+{
+    $$ = Value::None;
+}
+| program declassignment ';'
+{
+    $$ = Value::None;
+}
+| program functiondefinition
+{
+    $$ = Value::None;
+}
+
+functiondefinition:
+type id '(' ')' '{' statementlist '}'
+{
+    $$ = Value::None;  
+}
+| type id '(' parameterlist ')' '{' statementlist '}'
+{
+    $$ = Value::None;  
+}
+
+parameterlist:
+type id         
+{
+    $$ = Value::None;  
+}
+| parameterlist ',' type id
+{
+    $$ = Value::None;  
+}
+
+functioncall:
+id '(' ')'
+{
+    $$ = Value::None;  
+}
+| id '(' assignments ')'
+{
+    $$ = Value::None;  
+}
+
+assignments:
+assignment
+{
+    $$ = Value::None;  
+}
+| assignments ',' assignment
+{
+    $$ = Value::None;  
+}
+
+statementlist:
+%empty
+{
+    $$ = Value::None;  
+}
+| statementlist block
+{
+    $$ = Value::None;  
+}
+
+block:
+'{' statementlist '}'
+{
+    $$ = Value::None;  
+}
+| statement
+{
+    $$ = Value::None;  
+}
+
+statement:
+ifstatement
+{
+    $$ = Value::None;  
+}
+| forstatement
+{
+    $$ = Value::None;  
+}
+| whilestatement
+{
+    $$ = Value::None;  
+}
+| returnstatement ';'
+{
+    $$ = Value::None;  
+}
+| dowhilestatement ';'
+{
+    $$ = Value::None;  
+}
+| printf ';'
+{
+    $$ = Value::None;  
+}
+| declassignment ';'
+{
+    $$ = Value::None;  
+}
+| statassignment ';'
+{
+    $$ = Value::None;  
+}
+| functioncall ';'
+{
+    $$ = Value::None;  
+}
+
+statblock:
+'{' statementlist '}'
+{
+    $$ = Value::None;  
+}
+| statement
+{
+    $$ = Value::None;  
+}
+
+ifstatement:
+KW_IF '(' assignment ')' statblock %prec LOWER_THAN_ELSE
+{
+    $$ = Value::None;  
+}
+| KW_IF '(' assignment ')' statblock KW_ELSE statblock
+{
+    $$ = Value::None;  
+}
+
+forstatement:
+KW_FOR '(' statassignment ';' expr ';' statassignment ')' statblock
+{
+    $$ = Value::None;  
+}
+| KW_FOR '(' declassignment ';' expr ';' statassignment ')' statblock
+{
+    $$ = Value::None;  
+}
+
+dowhilestatement:
+KW_DO statblock KW_WHILE '(' assignment ')'
+{
+    $$ = Value::None;  
+}
+
+whilestatement:
+KW_WHILE '(' assignment ')' statblock
+{
+    $$ = Value::None;  
+}
+
+returnstatement:
+KW_RETURN
+{
+    $$ = Value::None;  
+}
+|KW_RETURN assignment
+{
+    $$ = Value::None;  
+}
+
+printf:
+KW_PRINTF '(' assignment ')'
+{
+    $$ = Value::None;  
+}
+| KW_PRINTF '(' CONST_STRING ')'
+{
+    $$ = Value::None;  
+}
+
+declassignment:
+type id
+{
+    $$ = Value::None;  
+}
+| type id '=' assignment
+{
+    $$ = Value::None;  
+}
+
+statassignment:
+id '=' assignment
+{
+    $$ = Value::None;  
+}
+
+assignment:
+id '=' assignment
+{
+    $$ = Value::None;  
+}
+| expr
+{
+    $$ = Value::None;  
+}
+
+expr:
+simpexpr
+{
+    $$ = Value::None;  
+}
+| simpexpr EQ simpexpr
+{
+    $$ = Value::None;  
+}
+| simpexpr NEQ simpexpr
+{
+    $$ = Value::None;  
+}
+| simpexpr LEQ simpexpr
+{
+    $$ = Value::None;  
+}
+| simpexpr GEQ simpexpr
+{
+    $$ = Value::None;  
+}
+| simpexpr LSS simpexpr
+{
+    $$ = Value::None;  
+}
+| simpexpr GRT simpexpr
+{
+    $$ = Value::None;  
+}
+
+simpexpr:
+UMINUS term
+{
+    $$ = Value::None;  
+}
+| term
+{
+    $$ = Value::None;  
+}
+| simpexpr '+' term
+{
+    $$ = Value::None;  
+}
+| simpexpr '-' term
+{
+    $$ = Value::None;  
+}
+| simpexpr OR term
+{
+    $$ = Value::None;  
+}
+
+term:
+factor 
+{
+    $$ = Value::None;  
+}
+| term '*' factor
+{
+    $$ = Value::None;  
+}
+| term '/' factor
+{
+    $$ = Value::None;  
+}
+| term AND factor
+{
+    $$ = Value::None;  
+}
+
+factor:
+CONST_INT
+{
+    $$ = Value::None;  
+}
+| CONST_FLOAT
+{
+    $$ = Value::None;  
+}
+| CONST_BOOLEAN
+{
+    $$ = Value::None;  
+}
+| functioncall
+{
+    $$ = Value::None;  
+}
+| id
+{
+    $$ = Value::None;  
+}
+| '(' assignment ')'
+{
+    $$ = Value::None;  
+}
+
+type:
+KW_BOOLEAN
+{
+    $$ = Value::None;  
+}
+| KW_FLOAT
+{
+    $$ = Value::None;  
+}
+| KW_INT
+{
+    $$ = Value::None;  
+}
+| KW_VOID
+{
+    $$ = Value::None;  
+}
+
+id:
+ID
+{
+    $$ = Value::None;  
+}
+
+
 
 
 %%
